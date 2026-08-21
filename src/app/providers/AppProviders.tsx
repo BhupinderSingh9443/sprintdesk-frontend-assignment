@@ -5,6 +5,8 @@ import {
 
 import type { PropsWithChildren } from 'react';
 
+import { ThemeSync } from '../../features/theme/ThemeSync';
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -20,6 +22,8 @@ export function AppProviders({
 }: PropsWithChildren) {
   return (
     <QueryClientProvider client={queryClient}>
+      <ThemeSync />
+
       {children}
     </QueryClientProvider>
   );
