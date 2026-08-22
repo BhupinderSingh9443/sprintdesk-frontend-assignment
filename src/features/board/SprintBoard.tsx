@@ -1,46 +1,197 @@
 import {
-  useMemo,
+    useMemo,
 } from 'react';
 
 import {
-  BOARD_COLUMNS,
+    BOARD_COLUMNS,
 } from './board.constants';
 
 import {
-  useBoardStore,
+    useBoardStore,
 } from './board.store';
 
 import {
-  BoardColumn,
+    BoardColumn,
 } from './BoardColumn';
 
+
+import {
+    closestCorners,
+    DndContext,
+    KeyboardSensor,
+    PointerSensor,
+    useSensor,
+    useSensors,
+} from '@dnd-kit/core';
+
 import type {
-  User,
+    DragEndEvent,
+} from '@dnd-kit/core';
+
+import {
+    sortableKeyboardCoordinates,
+} from '@dnd-kit/sortable';
+
+import type {
+    TaskStatus,
+    User,
 } from '../../types/domain';
 
 interface SprintBoardProps {
-  users: User[];
+    users: User[];
 }
 
 export function SprintBoard({
-  users,
+    users,
 }: SprintBoardProps) {
-  const tasks = useBoardStore(
-    (state) => state.tasks,
-  );
+    const tasks = useBoardStore(
+        (state) => state.tasks,
+    );
 
-  const usersById = useMemo(
-    () =>
-      new Map(
-        users.map((user) => [
-          user.id,
-          user,
-        ]),
-      ),
-    [users],
-  );
+    const moveTask = useBoardStore(
+        (state) => state.moveTask,
+    );
+
+    const usersById = useMemo(
+        () =>
+            new Map(
+                users.map((user) => [
+                    user.id,
+                    user,
+                ]),
+            ),
+        [users],
+    );
+
+    const sensors = useSensors(
+        useSensor(
+            PointerSensor,
+            {
+                activationConstraint: {
+                    distance: 6,
+                },
+            },
+        ),
+
+        useSensor(
+            KeyboardSensor,
+            {
+                coordinateGetter:
+                    sortableKeyboardCoordinates,
+            },
+        ),
+    );
+
+    function handleDragEnd(
+        event: DragEndEvent,
+    ) {
+        const {
+            active,
+            over,
+        } = event;
+
+        if (!over) {
+            return;
+        }
+
+        const activeTask = tasks.find(
+            (task) =>
+                task.id === Number(active.id),
+        );
+
+        if (!activeTask) {
+            return;
+        }
+
+        const overId = String(over.id);
+
+        /*
+         * Dropped directly on a column.
+         */
+
+        if (
+            overId.startsWith(
+                'column-',
+            )
+        ) {
+            const targetStatus =
+                overId.replace(
+                    'column-',
+                    '',
+                ) as TaskStatus;
+
+            const targetTasks =
+                tasks
+                    .filter(
+                        (task) =>
+                            task.status ===
+                            targetStatus,
+                    )
+                    .sort(
+                        (a, b) =>
+                            a.order - b.order,
+                    );
+
+            moveTask(
+                activeTask.id,
+                targetStatus,
+                targetTasks.length,
+            );
+
+            return;
+        }
+
+        /*
+         * Dropped over another task.
+         */
+
+        const overTask = tasks.find(
+            (task) =>
+                task.id === Number(
+                    over.id,
+                ),
+        );
+
+        if (!overTask) {
+            return;
+        }
+
+        const targetStatus =
+            overTask.status;
+
+        const targetTasks = tasks
+            .filter(
+                (task) =>
+                    task.status ===
+                    targetStatus,
+            )
+            .sort(
+                (a, b) =>
+                    a.order - b.order,
+            );
+
+        const targetIndex =
+            targetTasks.findIndex(
+                (task) =>
+                    task.id ===
+                    overTask.id,
+            );
+
+        moveTask(
+            activeTask.id,
+            targetStatus,
+            targetIndex,
+        );
+    }
 
   return (
+  <DndContext
+    sensors={sensors}
+    collisionDetection={
+      closestCorners
+    }
+    onDragEnd={handleDragEnd}
+  >
     <div
       className="
         overflow-x-auto
@@ -70,12 +221,15 @@ export function SprintBoard({
                 title={column.title}
                 status={column.id}
                 tasks={columnTasks}
-                usersById={usersById}
+                usersById={
+                  usersById
+                }
               />
             );
           },
         )}
       </div>
     </div>
-  );
+  </DndContext>
+);
 }
