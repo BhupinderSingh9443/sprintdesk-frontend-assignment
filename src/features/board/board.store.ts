@@ -363,15 +363,19 @@ export const useBoardStore =
                   ),
                 );
 
-              const updatedMovingTask: Task =
-              {
+              const now = new Date().toISOString();
+
+              const updatedMovingTask: Task = {
                 ...movingTask,
 
-                status:
-                  targetStatus,
+                status: targetStatus,
 
-                updatedAt:
-                  new Date().toISOString(),
+                updatedAt: now,
+
+                completedAt:
+                  targetStatus === 'done'
+                    ? movingTask.completedAt ?? now
+                    : null,
               };
 
               /*
