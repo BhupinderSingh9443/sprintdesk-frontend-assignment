@@ -185,11 +185,11 @@ export const useBoardStore =
                 state.tasks.map(
                   (task) =>
                     task.id ===
-                    taskId
+                      taskId
                       ? {
-                          ...task,
-                          ...updates,
-                        }
+                        ...task,
+                        ...updates,
+                      }
                       : task,
                 ),
             }),
@@ -206,26 +206,65 @@ export const useBoardStore =
         |
         */
 
-        deleteTask: (
-          taskId,
-        ) => {
-          set(
-            (state) => ({
-              tasks:
-                state.tasks.filter(
-                  (task) =>
-                    task.id !==
-                    taskId,
-                ),
+        deleteTask: (taskId) => {
+          set((state) => {
+            const taskToDelete =
+              state.tasks.find(
+                (task) => task.id === taskId,
+              );
+
+            if (!taskToDelete) {
+              return state;
+            }
+
+            const remainingTasks =
+              state.tasks.filter(
+                (task) => task.id !== taskId,
+              );
+
+            const normalizedTasks =
+              remainingTasks.map((task) => {
+                if (
+                  task.status !==
+                  taskToDelete.status
+                ) {
+                  return task;
+                }
+
+                const columnTasks =
+                  remainingTasks
+                    .filter(
+                      (columnTask) =>
+                        columnTask.status ===
+                        task.status,
+                    )
+                    .sort(
+                      (a, b) =>
+                        a.order - b.order,
+                    );
+
+                const newOrder =
+                  columnTasks.findIndex(
+                    (columnTask) =>
+                      columnTask.id === task.id,
+                  ) + 1;
+
+                return {
+                  ...task,
+                  order: newOrder,
+                };
+              });
+
+            return {
+              tasks: normalizedTasks,
 
               comments:
                 state.comments.filter(
                   (comment) =>
-                    comment.taskId !==
-                    taskId,
+                    comment.taskId !== taskId,
                 ),
-            }),
-          );
+            };
+          });
         },
 
         /*
@@ -274,9 +313,9 @@ export const useBoardStore =
                   .filter(
                     (task) =>
                       task.status ===
-                        sourceStatus &&
+                      sourceStatus &&
                       task.id !==
-                        taskId,
+                      taskId,
                   )
                   .sort(
                     (
@@ -294,22 +333,22 @@ export const useBoardStore =
 
               const targetTasks =
                 sourceStatus ===
-                targetStatus
+                  targetStatus
                   ? sourceTasks
                   : state.tasks
-                      .filter(
-                        (task) =>
-                          task.status ===
-                          targetStatus,
-                      )
-                      .sort(
-                        (
-                          first,
-                          second,
-                        ) =>
-                          first.order -
-                          second.order,
-                      );
+                    .filter(
+                      (task) =>
+                        task.status ===
+                        targetStatus,
+                    )
+                    .sort(
+                      (
+                        first,
+                        second,
+                      ) =>
+                        first.order -
+                        second.order,
+                    );
 
               /*
                * Prevent invalid indexes.
@@ -325,15 +364,15 @@ export const useBoardStore =
                 );
 
               const updatedMovingTask: Task =
-                {
-                  ...movingTask,
+              {
+                ...movingTask,
 
-                  status:
-                    targetStatus,
+                status:
+                  targetStatus,
 
-                  updatedAt:
-                    new Date().toISOString(),
-                };
+                updatedAt:
+                  new Date().toISOString(),
+              };
 
               /*
                * Insert task into its new
@@ -418,9 +457,9 @@ export const useBoardStore =
                 state.tasks.filter(
                   (task) =>
                     task.status !==
-                      sourceStatus &&
+                    sourceStatus &&
                     task.status !==
-                      targetStatus,
+                    targetStatus,
                 );
 
               return {
@@ -459,28 +498,28 @@ export const useBoardStore =
                 state.comments
                   .length > 0
                   ? Math.max(
-                      ...state.comments.map(
-                        (
-                          comment,
-                        ) =>
-                          comment.id,
-                      ),
-                    ) + 1
+                    ...state.comments.map(
+                      (
+                        comment,
+                      ) =>
+                        comment.id,
+                    ),
+                  ) + 1
                   : 1;
 
               const comment: Comment =
-                {
-                  id: nextId,
+              {
+                id: nextId,
 
-                  taskId,
+                taskId,
 
-                  authorId,
+                authorId,
 
-                  message,
+                message,
 
-                  createdAt:
-                    new Date().toISOString(),
-                };
+                createdAt:
+                  new Date().toISOString(),
+              };
 
               return {
                 comments: [

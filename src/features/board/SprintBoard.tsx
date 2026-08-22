@@ -20,6 +20,10 @@ import {
     BoardColumn,
 } from './BoardColumn';
 
+import {
+    ConfirmDialog,
+} from '../../components/ui/ConfirmDialog';
+
 
 import {
     closestCorners,
@@ -53,6 +57,26 @@ export function SprintBoard({
     const tasks = useBoardStore(
         (state) => state.tasks,
     );
+
+    const [
+        pendingDeleteTaskId,
+        setPendingDeleteTaskId,
+    ] = useState<number | null>(
+        null,
+    );
+
+    const deleteTask =
+        useBoardStore(
+            (state) =>
+                state.deleteTask,
+        );
+
+    const pendingDeleteTask =
+        tasks.find(
+            (task) =>
+                task.id ===
+                pendingDeleteTaskId,
+        );
 
     const [
         selectedTaskId,
@@ -258,15 +282,53 @@ export function SprintBoard({
             </DndContext>
 
             <TaskDrawer
-                taskId={
-                    selectedTaskId
-                }
+                taskId={selectedTaskId}
                 users={users}
                 onClose={() =>
-                    setSelectedTaskId(
+                    setSelectedTaskId(null)
+                }
+                onDelete={(taskId) => {
+                    setPendingDeleteTaskId(
+                        taskId,
+                    );
+
+                    setSelectedTaskId(null);
+                }}
+            />
+
+            <ConfirmDialog
+                open={
+                    pendingDeleteTask !==
+                    undefined
+                }
+                title="Delete task?"
+                description={
+                    pendingDeleteTask
+                        ? `"${pendingDeleteTask.title}" will be permanently removed from the sprint board.`
+                        : ''
+                }
+                confirmText="Delete task"
+                onCancel={() =>
+                    setPendingDeleteTaskId(
                         null,
                     )
                 }
+                onConfirm={() => {
+                    if (
+                        pendingDeleteTaskId ===
+                        null
+                    ) {
+                        return;
+                    }
+
+                    deleteTask(
+                        pendingDeleteTaskId,
+                    );
+
+                    setPendingDeleteTaskId(
+                        null,
+                    );
+                }}
             />
         </>
     );
