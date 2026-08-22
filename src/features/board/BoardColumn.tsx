@@ -22,6 +22,9 @@ interface BoardColumnProps {
     status: TaskStatus;
     tasks: Task[];
     usersById: Map<number, User>;
+    onOpenTask: (
+        taskId: number,
+    ) => void;
 }
 
 export function BoardColumn({
@@ -29,6 +32,7 @@ export function BoardColumn({
     status,
     tasks,
     usersById,
+    onOpenTask,
 }: BoardColumnProps) {
     const sortedTasks = [...tasks].sort(
         (a, b) => a.order - b.order,
@@ -112,6 +116,9 @@ export function BoardColumn({
                                 usersById.get(
                                     task.assigneeId,
                                 )
+                            }
+                            onOpen={() =>
+                                onOpenTask(task.id)
                             }
                         />
                     ))}

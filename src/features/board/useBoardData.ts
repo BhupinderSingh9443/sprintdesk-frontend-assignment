@@ -17,7 +17,14 @@ import {
 export function useBoardData() {
   const initializeTasks =
     useBoardStore(
-      (state) => state.initializeTasks,
+      (state) =>
+        state.initializeTasks,
+    );
+
+  const initializeComments =
+    useBoardStore(
+      (state) =>
+        state.initializeComments,
     );
 
   const query = useQuery({
@@ -33,9 +40,14 @@ export function useBoardData() {
     initializeTasks(
       query.data.tasks,
     );
+
+    initializeComments(
+      query.data.comments,
+    );
   }, [
     query.data,
     initializeTasks,
+    initializeComments,
   ]);
 
   return query;

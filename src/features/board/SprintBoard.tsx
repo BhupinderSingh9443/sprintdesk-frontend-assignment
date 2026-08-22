@@ -1,10 +1,16 @@
 import {
     useMemo,
+    useState,
 } from 'react';
 
 import {
     BOARD_COLUMNS,
 } from './board.constants';
+
+
+import {
+    TaskDrawer,
+} from './TaskDrawer';
 
 import {
     useBoardStore,
@@ -46,6 +52,13 @@ export function SprintBoard({
 }: SprintBoardProps) {
     const tasks = useBoardStore(
         (state) => state.tasks,
+    );
+
+    const [
+        selectedTaskId,
+        setSelectedTaskId,
+    ] = useState<number | null>(
+        null,
     );
 
     const moveTask = useBoardStore(
@@ -184,52 +197,77 @@ export function SprintBoard({
         );
     }
 
-  return (
-  <DndContext
-    sensors={sensors}
-    collisionDetection={
-      closestCorners
-    }
-    onDragEnd={handleDragEnd}
-  >
-    <div
-      className="
-        overflow-x-auto
-        pb-4
-      "
-    >
-      <div
-        className="
-          grid
-          min-w-[1180px]
-          grid-cols-4
-          gap-4
-        "
-      >
-        {BOARD_COLUMNS.map(
-          (column) => {
-            const columnTasks =
-              tasks.filter(
-                (task) =>
-                  task.status ===
-                  column.id,
-              );
-
-            return (
-              <BoardColumn
-                key={column.id}
-                title={column.title}
-                status={column.id}
-                tasks={columnTasks}
-                usersById={
-                  usersById
+    return (
+        <>
+            <DndContext
+                sensors={sensors}
+                collisionDetection={
+                    closestCorners
                 }
-              />
-            );
-          },
-        )}
-      </div>
-    </div>
-  </DndContext>
-);
+                onDragEnd={
+                    handleDragEnd
+                }
+            >
+                <div
+                    className="
+          overflow-x-auto
+          pb-4
+        "
+                >
+                    <div
+                        className="
+            grid
+            min-w-[1180px]
+            grid-cols-4
+            gap-4
+          "
+                    >
+                        {BOARD_COLUMNS.map(
+                            (column) => {
+                                const columnTasks =
+                                    tasks.filter(
+                                        (task) =>
+                                            task.status ===
+                                            column.id,
+                                    );
+
+                                return (
+                                    <BoardColumn
+                                        key={column.id}
+                                        title={
+                                            column.title
+                                        }
+                                        status={
+                                            column.id
+                                        }
+                                        tasks={
+                                            columnTasks
+                                        }
+                                        usersById={
+                                            usersById
+                                        }
+                                        onOpenTask={
+                                            setSelectedTaskId
+                                        }
+                                    />
+                                );
+                            },
+                        )}
+                    </div>
+                </div>
+            </DndContext>
+
+            <TaskDrawer
+                taskId={
+                    selectedTaskId
+                }
+                users={users}
+                onClose={() =>
+                    setSelectedTaskId(
+                        null,
+                    )
+                }
+            />
+        </>
+    );
 }

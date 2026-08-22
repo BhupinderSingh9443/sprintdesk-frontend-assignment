@@ -13,6 +13,7 @@ import {
 interface TaskCardProps {
     task: Task;
     assignee?: User;
+    onOpen: () => void;
 }
 
 function formatDueDate(
@@ -61,6 +62,7 @@ function getPriorityClasses(
 export function TaskCard({
     task,
     assignee,
+    onOpen,
 }: TaskCardProps) {
 
 
@@ -115,34 +117,34 @@ export function TaskCard({
 
                 <button
                     type="button"
+                    onClick={onOpen}
                     {...attributes}
                     {...listeners}
                     aria-label={`Drag ${task.title}`}
                     className="
-    cursor-grab
-    rounded
-    px-2
-    py-1
-    text-slate-400
-    hover:bg-slate-100
-    hover:text-slate-700
-    focus:outline-none
-    focus:ring-2
-    focus:ring-blue-500
-    active:cursor-grabbing
-    dark:hover:bg-slate-800
-  "
+                    cursor-grab
+                    rounded
+                    px-2
+                    py-1
+                    text-slate-400
+                    hover:bg-slate-100
+                    hover:text-slate-700
+                    focus:outline-none
+                    focus:ring-2
+                    focus:ring-blue-500
+                    active:cursor-grabbing
+                    dark:hover:bg-slate-800"
                 >
                     ⋮⋮
                 </button>
                 <h3
                     className="
-      flex-1
-      text-sm
-      font-semibold
-      leading-5
-      text-slate-900
-      dark:text-white
+                    flex-1
+                    text-sm
+                    font-semibold
+                    leading-5
+                    text-slate-900
+                    dark:text-white
     "
                 >
                     {task.title}

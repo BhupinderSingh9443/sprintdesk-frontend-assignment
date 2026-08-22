@@ -1,4 +1,5 @@
 import type {
+  Comment,
   Sprint,
   Task,
   User,
@@ -8,4 +9,5 @@ export interface BoardData {
   tasks: Task[];
   users: User[];
   sprints: Sprint[];
+  comments: Comment[];
 }
