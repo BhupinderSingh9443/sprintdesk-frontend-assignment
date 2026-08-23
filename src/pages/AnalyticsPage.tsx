@@ -1,3 +1,4 @@
+import { Button } from '../components/ui/Button';
 import {
   PageLoader,
 } from '../components/ui/PageLoader';
@@ -51,24 +52,14 @@ export default function AnalyticsPage() {
           the analytics data.
         </p>
 
-        <button
-          type="button"
+        <Button
+          className="mt-4"
           onClick={() => {
             void refetch();
           }}
-          className="
-            mt-4
-            rounded-lg
-            bg-blue-600
-            px-4
-            py-2
-            text-sm
-            font-medium
-            text-white
-          "
         >
           Try again
-        </button>
+        </Button>
       </section>
     );
   }

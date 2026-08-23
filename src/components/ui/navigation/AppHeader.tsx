@@ -15,6 +15,7 @@ import {
 import {
   useLogout,
 } from '../../../features/auth/useLogout';
+import { Button } from '../Button';
 
 interface AppHeaderProps {
   onMenuOpen: () => void;
@@ -140,28 +141,13 @@ export function AppHeader({
           </p>
         </div>
 
-        <button
-          type="button"
+        <Button
+          variant="ghost"
+          size="sm"
           onClick={logout}
-          className="
-            rounded-lg
-            px-3
-            py-2
-            text-sm
-            font-medium
-            text-slate-600
-            hover:bg-slate-100
-            hover:text-slate-900
-            focus:outline-none
-            focus:ring-2
-            focus:ring-blue-500
-            dark:text-slate-300
-            dark:hover:bg-slate-800
-            dark:hover:text-white
-          "
         >
           Logout
-        </button>
+        </Button>
       </div>
     </header>
   );

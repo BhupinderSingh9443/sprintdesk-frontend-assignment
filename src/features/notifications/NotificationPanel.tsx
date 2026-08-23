@@ -6,6 +6,7 @@ import {
 import {
   useNotificationStore,
 } from './notification.store';
+import { Button } from '../../components/ui/Button';
 
 const PAGE_SIZE = 20;
 
@@ -53,7 +54,7 @@ export function NotificationPanel() {
       1,
       Math.ceil(
         sortedNotifications.length /
-          PAGE_SIZE,
+        PAGE_SIZE,
       ),
     );
 
@@ -113,21 +114,14 @@ export function NotificationPanel() {
           Notifications
         </h2>
 
-        <button
-          type="button"
-          onClick={
-            markAllAsRead
-          }
-          className="
-            text-xs
-            font-medium
-            text-blue-600
-            hover:underline
-            dark:text-blue-400
-          "
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={markAllAsRead}
+          className="text-xs"
         >
           Mark all as read
-        </button>
+        </Button>
       </header>
 
       <div
@@ -160,10 +154,9 @@ export function NotificationPanel() {
                 dark:border-slate-800
                 dark:hover:bg-slate-800
 
-                ${
-                  notification.read
-                    ? ''
-                    : 'bg-blue-50/70 dark:bg-blue-950/30'
+                ${notification.read
+                  ? ''
+                  : 'bg-blue-50/70 dark:bg-blue-950/30'
                 }
               `}
             >
@@ -249,18 +242,18 @@ export function NotificationPanel() {
 
         {visibleNotifications.length ===
           0 && (
-          <p
-            className="
+            <p
+              className="
               px-4
               py-8
               text-center
               text-sm
               text-slate-500
             "
-          >
-            No notifications.
-          </p>
-        )}
+            >
+              No notifications.
+            </p>
+          )}
       </div>
 
       {totalPages > 1 && (
@@ -276,47 +269,43 @@ export function NotificationPanel() {
             dark:border-slate-800
           "
         >
-          <button
-            type="button"
+          <Button
+            variant="secondary"
+            size="sm"
             disabled={
               currentPage <= 1
             }
             onClick={() =>
-              setPage(
-                (value) =>
-                  Math.max(
-                    1,
-                    value - 1,
-                  ),
+              setPage((value) =>
+                Math.max(1, value - 1)
               )
             }
           >
             Previous
-          </button>
+          </Button>
 
           <span className="text-xs">
             {currentPage} /{' '}
             {totalPages}
           </span>
 
-          <button
-            type="button"
+          <Button
+            variant="secondary"
+            size="sm"
             disabled={
-              currentPage >=
-              totalPages
+              currentPage >= totalPages
             }
             onClick={() =>
-              setPage(
-                (value) =>
-                  Math.min(
-                    totalPages,
-                    value + 1,
-                  ),
+              setPage((value) =>
+                Math.min(
+                  totalPages,
+                  value + 1,
+                )
               )
             }
           >
             Next
-          </button>
+          </Button>
         </footer>
       )}
     </div>

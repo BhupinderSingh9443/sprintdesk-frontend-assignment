@@ -24,6 +24,8 @@ import {
     useBoardStore,
 } from './board.store';
 import { Button } from '../../components/ui/Button';
+import { Input } from '../../components/ui/Input';
+import { Select } from '../../components/ui/Select';
 
 interface TaskDrawerProps {
     taskId: number | null;
@@ -441,33 +443,14 @@ export function TaskDrawer({
                                 Title
                             </label>
 
-                            <input
+                            <Input
                                 id="task-title"
+                                label="Title"
                                 required
                                 value={title}
                                 onChange={(event) =>
-                                    setTitle(
-                                        event.target.value,
-                                    )
+                                    setTitle(event.target.value)
                                 }
-                                className="
-                  mt-2
-                  w-full
-                  rounded-lg
-                  border
-                  border-slate-300
-                  bg-white
-                  px-3
-                  py-2
-                  text-slate-900
-                  focus:border-blue-500
-                  focus:outline-none
-                  focus:ring-2
-                  focus:ring-blue-100
-                  dark:border-slate-700
-                  dark:bg-slate-950
-                  dark:text-white
-                "
                             />
                         </div>
 
@@ -543,6 +526,18 @@ export function TaskDrawer({
                                     Status
                                 </label>
 
+                                <Select
+                                    id="task-status"
+                                    label="Status"
+                                    value={status}
+                                    options={STATUS_OPTIONS}
+                                    onChange={(event) =>
+                                        setStatus(
+                                            event.target.value as TaskStatus,
+                                        )
+                                    }
+                                />
+                                {/* 
                                 <select
                                     id="task-status"
                                     value={status}
@@ -582,11 +577,11 @@ export function TaskDrawer({
                                             </option>
                                         ),
                                     )}
-                                </select>
+                                </select> */}
                             </div>
 
                             <div>
-                                <label
+                                {/* <label
                                     htmlFor="task-priority"
                                     className="
                     block
@@ -638,70 +633,45 @@ export function TaskDrawer({
                                             </option>
                                         ),
                                     )}
-                                </select>
+                                </select> */}
+
+                                <Select
+                                    id="task-priority"
+                                    label="Priority"
+                                    value={priority}
+                                    options={PRIORITY_OPTIONS}
+                                    onChange={(event) =>
+                                        setPriority(
+                                            event.target.value as TaskPriority,
+                                        )
+                                    }
+                                />
                             </div>
                         </div>
 
                         {/* Assignee */}
 
                         <div>
-                            <label
-                                htmlFor="task-assignee"
-                                className="
-                  block
-                  text-sm
-                  font-medium
-                  text-slate-700
-                  dark:text-slate-300
-                "
-                            >
-                                Assignee
-                            </label>
-
-                            <select
+                            <Select
                                 id="task-assignee"
-                                value={
-                                    assigneeId
-                                }
+                                label="Assignee"
+                                value={assigneeId}
+                                options={users.map((user) => ({
+                                    label: user.name,
+                                    value: user.id,
+                                }))}
                                 onChange={(event) =>
                                     setAssigneeId(
-                                        Number(
-                                            event.target
-                                                .value,
-                                        ),
+                                        Number(event.target.value),
                                     )
                                 }
-                                className="
-                  mt-2
-                  w-full
-                  rounded-lg
-                  border
-                  border-slate-300
-                  bg-white
-                  px-3
-                  py-2
-                  dark:border-slate-700
-                  dark:bg-slate-950
-                  dark:text-white
-                "
-                            >
-                                {users.map(
-                                    (user) => (
-                                        <option
-                                            key={user.id}
-                                            value={user.id}
-                                        >
-                                            {user.name}
-                                        </option>
-                                    ),
-                                )}
-                            </select>
+                            />
                         </div>
 
                         {/* Due date */}
 
                         <div>
-                            <label
+                            {/* <label
                                 htmlFor="task-due-date"
                                 className="
                   block
@@ -737,6 +707,17 @@ export function TaskDrawer({
                   dark:bg-slate-950
                   dark:text-white
                 "
+                            /> */}
+
+                            <Input
+                                id="task-due-date"
+                                label="Due date"
+                                type="date"
+                                required
+                                value={dueDate}
+                                onChange={(event) =>
+                                    setDueDate(event.target.value)
+                                }
                             />
                         </div>
                     </form>
@@ -950,7 +931,7 @@ export function TaskDrawer({
                 "
                             />
 
-                            <button
+                            {/* <button
                                 type="submit"
                                 disabled={
                                     !newComment.trim()
@@ -971,7 +952,16 @@ export function TaskDrawer({
                 "
                             >
                                 Add comment
-                            </button>
+                            </button> */}
+
+                            <Button
+                                type="submit"
+                                size="sm"
+                                disabled={!newComment.trim()}
+                                className="mt-3"
+                            >
+                                Add comment
+                            </Button>
                         </form>
                     </section>
                 </div>
@@ -991,7 +981,7 @@ export function TaskDrawer({
     dark:border-slate-800
   "
                 >
-                    <button
+                    {/* <button
                         type="button"
                         onClick={() =>
                             onDelete(task.id)
@@ -1012,7 +1002,16 @@ export function TaskDrawer({
     "
                     >
                         Delete task
-                    </button>
+                    </button> */}
+
+                    <Button
+                        variant="danger"
+                        onClick={() =>
+                            onDelete(task.id)
+                        }
+                    >
+                        Delete task
+                    </Button>
 
                     <div
                         className="
@@ -1032,7 +1031,7 @@ export function TaskDrawer({
 
 
 
-                        <button
+                        {/* <button
                             type="submit"
                             form="task-details-form"
                             className="
@@ -1047,7 +1046,14 @@ export function TaskDrawer({
                                 "
                         >
                             Save changes
-                        </button>
+                        </button> */}
+
+                        <Button
+                            type="submit"
+                            form="task-details-form"
+                        >
+                            Save changes
+                        </Button>
                     </div>
                 </footer>
             </div>

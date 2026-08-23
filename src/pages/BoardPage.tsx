@@ -17,6 +17,8 @@ import {
 import {
   TaskCreateModal,
 } from '../features/board/TaskCreateModal';
+import { Button } from '../components/ui/Button';
+import { PageLoader } from '../components/ui/PageLoader';
 
 export default function BoardPage() {
   const {
@@ -34,7 +36,7 @@ export default function BoardPage() {
 
 
   if (isLoading) {
-    return <FullScreenLoader />;
+    return <PageLoader />;
   }
 
   if (
@@ -66,25 +68,14 @@ export default function BoardPage() {
           the sprint data.
         </p>
 
-        <button
-          type="button"
+        <Button
+          className="mt-4"
           onClick={() => {
             void refetch();
           }}
-          className="
-            mt-4
-            rounded-lg
-            bg-blue-600
-            px-4
-            py-2
-            text-sm
-            font-medium
-            text-white
-            hover:bg-blue-700
-          "
         >
           Try again
-        </button>
+        </Button>
       </section>
     );
   }
@@ -149,27 +140,13 @@ export default function BoardPage() {
           </p>
         </div>
 
-        <button
-          type="button"
+        <Button
           onClick={() =>
             setCreateTaskOpen(true)
           }
-          className="
-      rounded-lg
-      bg-blue-600
-      px-4
-      py-2
-      text-sm
-      font-medium
-      text-white
-      hover:bg-blue-700
-      focus:outline-none
-      focus:ring-2
-      focus:ring-blue-500
-    "
         >
           + New task
-        </button>
+        </Button>
       </div>
 
       <SprintBoard
