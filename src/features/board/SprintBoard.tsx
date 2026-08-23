@@ -1,4 +1,5 @@
 import {
+    useCallback,
     useMemo,
     useState,
 } from 'react';
@@ -119,10 +120,13 @@ export function SprintBoard({
         ),
     );
 
-    function handleDragEnd(
-        event: DragEndEvent,
-    ) {
-        const {
+    const handleDragEnd =
+  useCallback(
+    (
+      event:
+        DragEndEvent,
+    ) => {
+    const {
             active,
             over,
         } = event;
@@ -219,7 +223,114 @@ export function SprintBoard({
             targetStatus,
             targetIndex,
         );
-    }
+    },
+    [
+      tasks,
+      moveTask,
+    ],
+  );
+
+    // function handleDragEnd(
+    //     event: DragEndEvent,
+    // ) {
+    //     const {
+    //         active,
+    //         over,
+    //     } = event;
+
+    //     if (!over) {
+    //         return;
+    //     }
+
+    //     const activeTask = tasks.find(
+    //         (task) =>
+    //             task.id === Number(active.id),
+    //     );
+
+    //     if (!activeTask) {
+    //         return;
+    //     }
+
+    //     const overId = String(over.id);
+
+    //     /*
+    //      * Dropped directly on a column.
+    //      */
+
+    //     if (
+    //         overId.startsWith(
+    //             'column-',
+    //         )
+    //     ) {
+    //         const targetStatus =
+    //             overId.replace(
+    //                 'column-',
+    //                 '',
+    //             ) as TaskStatus;
+
+    //         const targetTasks =
+    //             tasks
+    //                 .filter(
+    //                     (task) =>
+    //                         task.status ===
+    //                         targetStatus,
+    //                 )
+    //                 .sort(
+    //                     (a, b) =>
+    //                         a.order - b.order,
+    //                 );
+
+    //         moveTask(
+    //             activeTask.id,
+    //             targetStatus,
+    //             targetTasks.length,
+    //         );
+
+    //         return;
+    //     }
+
+    //     /*
+    //      * Dropped over another task.
+    //      */
+
+    //     const overTask = tasks.find(
+    //         (task) =>
+    //             task.id === Number(
+    //                 over.id,
+    //             ),
+    //     );
+
+    //     if (!overTask) {
+    //         return;
+    //     }
+
+    //     const targetStatus =
+    //         overTask.status;
+
+    //     const targetTasks = tasks
+    //         .filter(
+    //             (task) =>
+    //                 task.status ===
+    //                 targetStatus,
+    //         )
+    //         .sort(
+    //             (a, b) =>
+    //                 a.order - b.order,
+    //         );
+
+    //     const targetIndex =
+    //         targetTasks.findIndex(
+    //             (task) =>
+    //                 task.id ===
+    //                 overTask.id,
+    //         );
+
+    //     moveTask(
+    //         activeTask.id,
+    //         targetStatus,
+    //         targetIndex,
+    //     );
+    // }
 
     return (
         <>

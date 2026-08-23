@@ -17,6 +17,10 @@ import {
     useDroppable,
 } from '@dnd-kit/core';
 
+import {
+    useMemo,
+} from 'react';
+
 interface BoardColumnProps {
     title: string;
     status: TaskStatus;
@@ -34,10 +38,16 @@ export function BoardColumn({
     usersById,
     onOpenTask,
 }: BoardColumnProps) {
-    const sortedTasks = [...tasks].sort(
-        (a, b) => a.order - b.order,
-    );
-
+    const sortedTasks =
+        useMemo(
+            () =>
+                [...tasks].sort(
+                    (a, b) =>
+                        a.order -
+                        b.order,
+                ),
+            [tasks],
+        );
     const {
         setNodeRef,
         isOver,
@@ -110,15 +120,14 @@ export function BoardColumn({
                 <div className="space-y-3">
                     {sortedTasks.map((task) => (
                         <TaskCard
-                            key={task.id}
                             task={task}
                             assignee={
                                 usersById.get(
                                     task.assigneeId,
                                 )
                             }
-                            onOpen={() =>
-                                onOpenTask(task.id)
+                            onOpen={
+                                onOpenTask
                             }
                         />
                     ))}

@@ -9,11 +9,14 @@ import {
 import {
     CSS,
 } from '@dnd-kit/utilities';
+import { memo } from 'react';
 
 interface TaskCardProps {
     task: Task;
     assignee?: User;
-    onOpen: () => void;
+    onOpen: (
+        taskId: number,
+    ) => void;
 }
 
 function formatDueDate(
@@ -59,7 +62,7 @@ function getPriorityClasses(
     }
 }
 
-export function TaskCard({
+function TaskCardComponent({
     task,
     assignee,
     onOpen,
@@ -117,7 +120,7 @@ export function TaskCard({
 
                 <button
                     type="button"
-                    onClick={onOpen}
+                    onClick={() => onOpen(task.id)}
                     {...attributes}
                     {...listeners}
                     aria-label={`Drag ${task.title}`}
@@ -242,3 +245,6 @@ export function TaskCard({
         </article>
     );
 }
+
+export const TaskCard =
+  memo(TaskCardComponent);
