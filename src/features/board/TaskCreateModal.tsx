@@ -162,7 +162,7 @@ export function TaskCreateModal({
                 className="p-6"
             >
                 <div>
-                    <label
+                    {/* <label
                         htmlFor="new-task-title"
                         className="
               block
@@ -173,7 +173,7 @@ export function TaskCreateModal({
             "
                     >
                         Title
-                    </label>
+                    </label> */}
 
                     <Input
                         label="Title"
@@ -196,7 +196,7 @@ export function TaskCreateModal({
           "
                 >
                     <div>
-                        <label
+                        {/* <label
                             htmlFor="new-task-priority"
                             className="
                 block
@@ -207,7 +207,7 @@ export function TaskCreateModal({
               "
                         >
                             Priority
-                        </label>
+                        </label> */}
 
                         <Select
                             label="Priority"
@@ -237,7 +237,7 @@ export function TaskCreateModal({
                     </div>
 
                     <div>
-                        <label
+                        {/* <label
                             htmlFor="new-task-due-date"
                             className="
                 block
@@ -248,7 +248,7 @@ export function TaskCreateModal({
               "
                         >
                             Due date
-                        </label>
+                        </label> */}
 
                         <Input
                             label="Due date"
@@ -265,7 +265,7 @@ export function TaskCreateModal({
                 </div>
 
                 <div className="mt-5">
-                    <label
+                    {/* <label
                         htmlFor="new-task-assignee"
                         className="
               block
@@ -276,7 +276,7 @@ export function TaskCreateModal({
             "
                     >
                         Assignee
-                    </label>
+                    </label> */}
 
                     <Select
                         label="Assignee"
