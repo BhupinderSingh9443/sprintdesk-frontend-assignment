@@ -11,6 +11,7 @@ import type {
 } from 'react';
 
 import type {
+    Task,
     TaskPriority,
     TaskStatus,
     User,
@@ -27,14 +28,27 @@ import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
 import { Select } from '../../components/ui/Select';
 
+
+
 interface TaskDrawerProps {
-    taskId: number | null;
+    taskId: number;
     users: User[];
     onClose: () => void;
     onDelete: (
         taskId: number,
     ) => void;
 }
+
+interface TaskDrawerContentProps {
+    task: Task;
+    users: User[];
+    onClose: () => void;
+    onDelete: (
+        taskId: number,
+    ) => void;
+}
+
+
 
 const STATUS_OPTIONS: {
     value: TaskStatus;
@@ -82,6 +96,36 @@ export function TaskDrawer({
     onClose,
     onDelete,
 }: TaskDrawerProps) {
+    const task = useBoardStore(
+        (state) =>
+            state.tasks.find(
+                (item) =>
+                    item.id === taskId,
+            ),
+    );
+
+    if (!task) {
+        return null;
+    }
+
+    return (
+        <TaskDrawerContent
+            task={task}
+            users={users}
+            onClose={onClose}
+            onDelete={onDelete}
+        />
+    );
+}
+
+function TaskDrawerContent({
+    task,
+    users,
+    onClose,
+    onDelete,
+}: TaskDrawerContentProps) {
+
+
     const dialogRef =
         useRef<HTMLDialogElement>(null);
 
@@ -113,113 +157,92 @@ export function TaskDrawer({
             (state) => state.user,
         );
 
-    const task = tasks.find(
-        (item) => item.id === taskId,
-    );
-
     const taskComments =
         useMemo(
             () =>
                 comments
                     .filter(
                         (comment) =>
-                            comment.taskId === taskId,
+                            comment.taskId ===
+                            task.id,
                     )
                     .sort(
                         (a, b) =>
-                            new Date(a.createdAt)
-                                .getTime() -
-                            new Date(b.createdAt)
-                                .getTime(),
+                            new Date(
+                                a.createdAt,
+                            ).getTime() -
+                            new Date(
+                                b.createdAt,
+                            ).getTime(),
                     ),
             [
                 comments,
-                taskId,
+                task.id,
             ],
         );
 
     const [
         title,
         setTitle,
-    ] = useState('');
+    ] = useState(
+        task.title,
+    );
 
     const [
         description,
         setDescription,
-    ] = useState('');
+    ] = useState(
+        task.description,
+    );
 
     const [
         priority,
         setPriority,
     ] =
-        useState<TaskPriority>('medium');
+        useState<TaskPriority>(
+            task.priority,
+        );
 
     const [
         status,
         setStatus,
     ] =
-        useState<TaskStatus>('backlog');
+        useState<TaskStatus>(
+            task.status,
+        );
 
     const [
         assigneeId,
         setAssigneeId,
-    ] =
-        useState<number>(users[0]?.id ?? 1);
+    ] = useState<number>(
+        task.assigneeId,
+    );
 
     const [
         dueDate,
         setDueDate,
-    ] = useState('');
+    ] = useState(
+        task.dueDate,
+    );
 
     const [
         newComment,
         setNewComment,
     ] = useState('');
 
-    useEffect(() => {
-        if (!task) {
-            return;
-        }
-
-        setTitle(task.title);
-
-        setDescription(
-            task.description,
-        );
-
-        setPriority(
-            task.priority,
-        );
-
-        setStatus(
-            task.status,
-        );
-
-        setAssigneeId(
-            task.assigneeId,
-        );
-
-        setDueDate(
-            task.dueDate,
-        );
-    }, [task]);
 
     useEffect(() => {
         const dialog =
             dialogRef.current;
 
         if (
-            task &&
             dialog &&
             !dialog.open
         ) {
             dialog.showModal();
         }
-    }, [task]);
+    }, []);
 
-    if (!task) {
-        return null;
-    }
 
     function closeDrawer() {
         dialogRef.current?.close();
@@ -430,18 +453,7 @@ export function TaskDrawer({
                         {/* Title */}
 
                         <div>
-                            <label
-                                htmlFor="task-title"
-                                className="
-                  block
-                  text-sm
-                  font-medium
-                  text-slate-700
-                  dark:text-slate-300
-                "
-                            >
-                                Title
-                            </label>
+                        
 
                             <Input
                                 id="task-title"
@@ -513,18 +525,7 @@ export function TaskDrawer({
               "
                         >
                             <div>
-                                <label
-                                    htmlFor="task-status"
-                                    className="
-                    block
-                    text-sm
-                    font-medium
-                    text-slate-700
-                    dark:text-slate-300
-                  "
-                                >
-                                    Status
-                                </label>
+                              
 
                                 <Select
                                     id="task-status"

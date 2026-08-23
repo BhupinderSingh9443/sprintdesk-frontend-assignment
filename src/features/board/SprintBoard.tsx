@@ -121,48 +121,86 @@ export function SprintBoard({
     );
 
     const handleDragEnd =
-  useCallback(
-    (
-      event:
-        DragEndEvent,
-    ) => {
-    const {
-            active,
-            over,
-        } = event;
+        useCallback(
+            (
+                event:
+                    DragEndEvent,
+            ) => {
+                const {
+                    active,
+                    over,
+                } = event;
 
-        if (!over) {
-            return;
-        }
+                if (!over) {
+                    return;
+                }
 
-        const activeTask = tasks.find(
-            (task) =>
-                task.id === Number(active.id),
-        );
+                const activeTask = tasks.find(
+                    (task) =>
+                        task.id === Number(active.id),
+                );
 
-        if (!activeTask) {
-            return;
-        }
+                if (!activeTask) {
+                    return;
+                }
 
-        const overId = String(over.id);
+                const overId = String(over.id);
 
-        /*
-         * Dropped directly on a column.
-         */
+                /*
+                 * Dropped directly on a column.
+                 */
 
-        if (
-            overId.startsWith(
-                'column-',
-            )
-        ) {
-            const targetStatus =
-                overId.replace(
-                    'column-',
-                    '',
-                ) as TaskStatus;
+                if (
+                    overId.startsWith(
+                        'column-',
+                    )
+                ) {
+                    const targetStatus =
+                        overId.replace(
+                            'column-',
+                            '',
+                        ) as TaskStatus;
 
-            const targetTasks =
-                tasks
+                    const targetTasks =
+                        tasks
+                            .filter(
+                                (task) =>
+                                    task.status ===
+                                    targetStatus,
+                            )
+                            .sort(
+                                (a, b) =>
+                                    a.order - b.order,
+                            );
+
+                    moveTask(
+                        activeTask.id,
+                        targetStatus,
+                        targetTasks.length,
+                    );
+
+                    return;
+                }
+
+                /*
+                 * Dropped over another task.
+                 */
+
+                const overTask = tasks.find(
+                    (task) =>
+                        task.id === Number(
+                            over.id,
+                        ),
+                );
+
+                if (!overTask) {
+                    return;
+                }
+
+                const targetStatus =
+                    overTask.status;
+
+                const targetTasks = tasks
                     .filter(
                         (task) =>
                             task.status ===
@@ -173,62 +211,24 @@ export function SprintBoard({
                             a.order - b.order,
                     );
 
-            moveTask(
-                activeTask.id,
-                targetStatus,
-                targetTasks.length,
-            );
+                const targetIndex =
+                    targetTasks.findIndex(
+                        (task) =>
+                            task.id ===
+                            overTask.id,
+                    );
 
-            return;
-        }
-
-        /*
-         * Dropped over another task.
-         */
-
-        const overTask = tasks.find(
-            (task) =>
-                task.id === Number(
-                    over.id,
-                ),
-        );
-
-        if (!overTask) {
-            return;
-        }
-
-        const targetStatus =
-            overTask.status;
-
-        const targetTasks = tasks
-            .filter(
-                (task) =>
-                    task.status ===
+                moveTask(
+                    activeTask.id,
                     targetStatus,
-            )
-            .sort(
-                (a, b) =>
-                    a.order - b.order,
-            );
-
-        const targetIndex =
-            targetTasks.findIndex(
-                (task) =>
-                    task.id ===
-                    overTask.id,
-            );
-
-        moveTask(
-            activeTask.id,
-            targetStatus,
-            targetIndex,
+                    targetIndex,
+                );
+            },
+            [
+                tasks,
+                moveTask,
+            ],
         );
-    },
-    [
-      tasks,
-      moveTask,
-    ],
-  );
 
     // function handleDragEnd(
     //     event: DragEndEvent,
@@ -392,7 +392,7 @@ export function SprintBoard({
                 </div>
             </DndContext>
 
-            <TaskDrawer
+            {/* <TaskDrawer
                 taskId={selectedTaskId}
                 users={users}
                 onClose={() =>
@@ -405,7 +405,29 @@ export function SprintBoard({
 
                     setSelectedTaskId(null);
                 }}
-            />
+            /> */}
+
+            {selectedTaskId !== null && (
+                <TaskDrawer
+                    key={selectedTaskId}
+                    taskId={selectedTaskId}
+                    users={users}
+                    onClose={() =>
+                        setSelectedTaskId(
+                            null,
+                        )
+                    }
+                    onDelete={(taskId) => {
+                        setPendingDeleteTaskId(
+                            taskId,
+                        );
+
+                        setSelectedTaskId(
+                            null,
+                        );
+                    }}
+                />
+            )}
 
             <ConfirmDialog
                 open={

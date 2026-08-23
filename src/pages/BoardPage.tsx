@@ -1,6 +1,4 @@
-import {
-  FullScreenLoader,
-} from '../components/ui/FullScreenLoader';
+
 
 import {
   SprintBoard,

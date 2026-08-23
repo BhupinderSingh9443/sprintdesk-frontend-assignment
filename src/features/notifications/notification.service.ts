@@ -18,7 +18,7 @@ Promise<Notification[]> {
 export async function pollNotifications():
 Promise<JsonPlaceholderPost[]> {
   const response = await fetch(
-    'https://jsonplaceholder.typicode.com/posts?_limit=5',
+    'https://jsonplaceholder.typicode.com/posts',
   );
 
   if (!response.ok) {

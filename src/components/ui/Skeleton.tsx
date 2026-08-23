@@ -2,8 +2,8 @@ import type {
   HTMLAttributes,
 } from 'react';
 
-interface SkeletonProps
-  extends HTMLAttributes<HTMLDivElement> {}
+type SkeletonProps =
+  HTMLAttributes<HTMLDivElement>;
 
 export function Skeleton({
   className = '',
@@ -17,7 +17,6 @@ export function Skeleton({
         rounded-md
         bg-slate-200
         dark:bg-slate-800
-
         ${className}
       `}
       {...props}
