@@ -23,6 +23,7 @@ import {
 import {
     useBoardStore,
 } from './board.store';
+import { Button } from '../../components/ui/Button';
 
 interface TaskDrawerProps {
     taskId: number | null;
@@ -996,18 +997,18 @@ export function TaskDrawer({
                             onDelete(task.id)
                         }
                         className="
-      rounded-lg
-      px-4
-      py-2
-      text-sm
-      font-medium
-      text-red-600
-      hover:bg-red-50
-      focus:outline-none
-      focus:ring-2
-      focus:ring-red-500
-      dark:text-red-400
-      dark:hover:bg-red-950
+                        rounded-lg
+                        px-4
+                        py-2
+                        text-sm
+                        font-medium
+                        text-red-600
+                        hover:bg-red-50
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-red-500
+                        dark:text-red-400
+                        dark:hover:bg-red-950
     "
                     >
                         Delete task
@@ -1015,43 +1016,35 @@ export function TaskDrawer({
 
                     <div
                         className="
-      flex
-      items-center
-      gap-3
-    "
+                        flex
+                        items-center
+                        gap-3
+                            "
                     >
-                        <button
-                            type="button"
-                            onClick={
-                                closeDrawer
-                            }
-                            className="
-        rounded-lg
-        border
-        border-slate-300
-        px-4
-        py-2
-        text-sm
-        font-medium
-        dark:border-slate-700
-      "
+
+
+                        <Button
+                            variant="secondary"
+                            onClick={closeDrawer}
                         >
                             Cancel
-                        </button>
+                        </Button>
+
+
 
                         <button
                             type="submit"
                             form="task-details-form"
                             className="
-        rounded-lg
-        bg-blue-600
-        px-4
-        py-2
-        text-sm
-        font-medium
-        text-white
-        hover:bg-blue-700
-      "
+                            rounded-lg
+                            bg-blue-600
+                            px-4
+                            py-2
+                            text-sm
+                            font-medium
+                            text-white
+                            hover:bg-blue-700
+                                "
                         >
                             Save changes
                         </button>

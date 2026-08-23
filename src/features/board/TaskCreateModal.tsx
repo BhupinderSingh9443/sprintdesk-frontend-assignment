@@ -19,6 +19,9 @@ import type {
     TaskPriority,
     User,
 } from '../../types/domain';
+import { Input } from '../../components/ui/Input';
+import { Select } from '../../components/ui/Select';
+import { Button } from '../../components/ui/Button';
 
 interface TaskCreateModalProps {
     open: boolean;
@@ -172,34 +175,15 @@ export function TaskCreateModal({
                         Title
                     </label>
 
-                    <input
-                        id="new-task-title"
+                    <Input
+                        label="Title"
                         required
-                        autoFocus
                         value={title}
                         onChange={(event) =>
                             setTitle(
                                 event.target.value,
                             )
                         }
-                        className="
-              mt-2
-              w-full
-              rounded-lg
-              border
-              border-slate-300
-              bg-white
-              px-3
-              py-2
-              text-slate-900
-              focus:border-blue-500
-              focus:outline-none
-              focus:ring-2
-              focus:ring-blue-100
-              dark:border-slate-700
-              dark:bg-slate-950
-              dark:text-white
-            "
                     />
                 </div>
 
@@ -225,41 +209,31 @@ export function TaskCreateModal({
                             Priority
                         </label>
 
-                        <select
-                            id="new-task-priority"
+                        <Select
+                            label="Priority"
                             value={priority}
+                            options={[
+                                {
+                                    label: 'Low',
+                                    value: 'low',
+                                },
+                                {
+                                    label: 'Medium',
+                                    value:
+                                        'medium',
+                                },
+                                {
+                                    label: 'High',
+                                    value: 'high',
+                                },
+                            ]}
                             onChange={(event) =>
                                 setPriority(
                                     event.target
                                         .value as TaskPriority,
                                 )
                             }
-                            className="
-                mt-2
-                w-full
-                rounded-lg
-                border
-                border-slate-300
-                bg-white
-                px-3
-                py-2
-                dark:border-slate-700
-                dark:bg-slate-950
-                dark:text-white
-              "
-                        >
-                            <option value="low">
-                                Low
-                            </option>
-
-                            <option value="medium">
-                                Medium
-                            </option>
-
-                            <option value="high">
-                                High
-                            </option>
-                        </select>
+                        />
                     </div>
 
                     <div>
@@ -276,8 +250,8 @@ export function TaskCreateModal({
                             Due date
                         </label>
 
-                        <input
-                            id="new-task-due-date"
+                        <Input
+                            label="Due date"
                             type="date"
                             required
                             value={dueDate}
@@ -286,19 +260,6 @@ export function TaskCreateModal({
                                     event.target.value,
                                 )
                             }
-                            className="
-                mt-2
-                w-full
-                rounded-lg
-                border
-                border-slate-300
-                bg-white
-                px-3
-                py-2
-                dark:border-slate-700
-                dark:bg-slate-950
-                dark:text-white
-              "
                         />
                     </div>
                 </div>
@@ -317,9 +278,19 @@ export function TaskCreateModal({
                         Assignee
                     </label>
 
-                    <select
-                        id="new-task-assignee"
+                    <Select
+                        label="Assignee"
                         value={assigneeId}
+                        options={
+                            users.map(
+                                (user) => ({
+                                    label:
+                                        user.name,
+                                    value:
+                                        user.id,
+                                }),
+                            )
+                        }
                         onChange={(event) =>
                             setAssigneeId(
                                 Number(
@@ -327,31 +298,7 @@ export function TaskCreateModal({
                                 ),
                             )
                         }
-                        className="
-              mt-2
-              w-full
-              rounded-lg
-              border
-              border-slate-300
-              bg-white
-              px-3
-              py-2
-              dark:border-slate-700
-              dark:bg-slate-950
-              dark:text-white
-            "
-                    >
-                        {users.map(
-                            (user) => (
-                                <option
-                                    key={user.id}
-                                    value={user.id}
-                                >
-                                    {user.name}
-                                </option>
-                            ),
-                        )}
-                    </select>
+                    />
                 </div>
 
                 <div
@@ -362,41 +309,18 @@ export function TaskCreateModal({
             gap-3
           "
                 >
-                    <button
-                        type="button"
+                    <Button
+                        variant="secondary"
                         onClick={onClose}
-                        className="
-              rounded-lg
-              border
-              border-slate-300
-              px-4
-              py-2
-              text-sm
-              font-medium
-              dark:border-slate-700
-            "
                     >
                         Cancel
-                    </button>
+                    </Button>
 
-                    <button
+                    <Button
                         type="submit"
-                        className="
-              rounded-lg
-              bg-blue-600
-              px-4
-              py-2
-              text-sm
-              font-medium
-              text-white
-              hover:bg-blue-700
-              focus:outline-none
-              focus:ring-2
-              focus:ring-blue-500
-            "
                     >
                         Create task
-                    </button>
+                    </Button>
                 </div>
             </form>
         </Modal>

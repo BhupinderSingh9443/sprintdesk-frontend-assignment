@@ -5,6 +5,10 @@ import {
 } from '../../../stores/auth.store';
 
 import {
+  NotificationCenter,
+} from '../../../features/notifications/NotificationCenter';
+
+import {
   ThemeToggle,
 } from '../../../features/theme/ThemeToggle';
 
@@ -103,6 +107,7 @@ export function AppHeader({
       </div>
 
       <div className="flex items-center gap-3">
+        <NotificationCenter />
         <ThemeToggle />
 
         <div

@@ -18,6 +18,14 @@ import {
   useLogin,
 } from '../features/auth/useLogin';
 
+import {
+  Button,
+} from '../components/ui/Button';
+
+import {
+  Input,
+} from '../components/ui/Input';
+
 export default function LoginPage() {
   const navigate = useNavigate();
 
@@ -110,29 +118,18 @@ export default function LoginPage() {
               Username
             </label>
 
-            <input
-              id="username"
+            <Input
+              label="Username"
               name="username"
               type="text"
               autoComplete="username"
               required
               value={username}
               onChange={(event) =>
-                setUsername(event.target.value)
+                setUsername(
+                  event.target.value,
+                )
               }
-              className="
-                mt-2
-                w-full
-                rounded-lg
-                border
-                border-slate-300
-                px-3
-                py-2
-                outline-none
-                focus:border-blue-500
-                focus:ring-2
-                focus:ring-blue-100
-              "
             />
           </div>
 
@@ -149,29 +146,18 @@ export default function LoginPage() {
               Password
             </label>
 
-            <input
-              id="password"
+            <Input
+              label="Password"
               name="password"
               type="password"
               autoComplete="current-password"
               required
               value={password}
               onChange={(event) =>
-                setPassword(event.target.value)
+                setPassword(
+                  event.target.value,
+                )
               }
-              className="
-                mt-2
-                w-full
-                rounded-lg
-                border
-                border-slate-300
-                px-3
-                py-2
-                outline-none
-                focus:border-blue-500
-                focus:ring-2
-                focus:ring-blue-100
-              "
             />
           </div>
 
@@ -187,27 +173,19 @@ export default function LoginPage() {
             </p>
           )}
 
-          <button
+
+
+          <Button
             type="submit"
-            disabled={loginMutation.isPending}
-            className="
-              w-full
-              rounded-lg
-              bg-blue-600
-              px-4
-              py-2.5
-              font-medium
-              text-white
-              transition
-              hover:bg-blue-700
-              disabled:cursor-not-allowed
-              disabled:opacity-50
-            "
+            fullWidth
+            loading={
+              loginMutation.isPending
+            }
           >
             {loginMutation.isPending
               ? 'Signing in...'
               : 'Sign in'}
-          </button>
+          </Button>
         </form>
       </section>
     </main>

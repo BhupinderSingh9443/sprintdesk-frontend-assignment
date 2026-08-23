@@ -4,6 +4,9 @@ import {
 } from '@tanstack/react-query';
 
 import type { PropsWithChildren } from 'react';
+import {
+  ToastViewport,
+} from '../../features/toast/ToastViewport';
 
 import { ThemeSync } from '../../features/theme/ThemeSync';
 
@@ -25,6 +28,8 @@ export function AppProviders({
       <ThemeSync />
 
       {children}
+
+      <ToastViewport />
     </QueryClientProvider>
   );
 }
