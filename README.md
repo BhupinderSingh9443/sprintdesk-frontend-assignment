@@ -6,17 +6,10 @@ The goal of the project was to build a small but production-oriented React appli
 
 ## Live Demo
 
-Live application:
-
-**[Add deployed URL here]**
-
 GitHub repository:
 
 **https://github.com/BhupinderSingh9443/sprintdesk-frontend-assignment**
 
-Demo video:
-
-**[Add screen recording URL here]**
 
 ---
 
